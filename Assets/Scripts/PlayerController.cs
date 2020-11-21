@@ -4,84 +4,32 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] Collider2D _right;
-    [SerializeField] Collider2D _left;
-    [SerializeField] Collider2D _top;
-    [SerializeField] Collider2D _bottom;
+    [SerializeField] Rigidbody2D _rb2d;
     [Space(10)]
-    [SerializeField] Collider2D _wall;
-    [SerializeField] ContactFilter2D _stage;
+    [SerializeField] Transform _groundCheck;
+    [SerializeField] LayerMask _ground;
     [Space(10)]
 
+    bool isGrounded = false;
+
     public float jumpHeight = 2.5f;
-    bool isJumping = false;
-    bool isFalling = false;
+    public float speed = 1;
 
     void FixedUpdate()
     {
-        Collider2D[] rightCheck = new Collider2D[1];
-        Collider2D[] leftCheck = new Collider2D[1];
-        Collider2D[] topCheck = new Collider2D[1];
-        Collider2D[] bottomCheck = new Collider2D[1];
+        isGrounded = Physics2D.OverlapBox(_groundCheck.position, new Vector2(7,1), 0, _ground);
 
-        Physics2D.OverlapCollider(_right, _stage, rightCheck);
-        Physics2D.OverlapCollider(_left, _stage, leftCheck);
-        Physics2D.OverlapCollider(_top, _stage, topCheck);
-        Physics2D.OverlapCollider(_bottom, _stage, bottomCheck);
-
-        if (Input.GetKey(KeyCode.A) && leftCheck[0] != _wall)
+        if (Input.GetButton("Horizontal"))
         {
-            transform.position = new Vector2(transform.position.x - 1, transform.position.y);
-        }
-        if (Input.GetKey(KeyCode.D) && rightCheck[0] != _wall)
+            _rb2d.velocity = new Vector2((16*Input.GetAxis("Horizontal")) * speed, _rb2d.velocity.y);
+        } else
         {
-            transform.position = new Vector2(transform.position.x + 1, transform.position.y);
+            _rb2d.velocity = new Vector2(0, _rb2d.velocity.y);
         }
 
-        if (bottomCheck[0] != _wall && !isJumping && !isFalling)
+        if (Input.GetKey(KeyCode.Space) && isGrounded)
         {
-            StartCoroutine("Falling");
+            _rb2d.velocity = new Vector2(_rb2d.velocity.x, 16 * jumpHeight);
         }
-        if (bottomCheck[0] == _wall)
-        {
-            StopCoroutine("Falling");
-            isFalling = false;
-        }
-
-        if (Input.GetKey(KeyCode.Space) && bottomCheck[0] == _wall && topCheck[0] != _wall)
-        {
-            StartCoroutine("Jumping");
-        }
-        if (topCheck[0] == _wall)
-        {
-            StopCoroutine("Jumping");
-            isJumping = false;
-        }
-    }
-
-    IEnumerator Jumping()
-    {
-        isJumping = true;
-        for (float i = 0f; i < (jumpHeight*16f); i++)
-        {
-            transform.position = new Vector2(transform.position.x, transform.position.y + 1);
-            yield return new WaitForFixedUpdate();
-        }
-        isJumping = false;
-        yield return null;
-    }
-
-    IEnumerator Falling()
-    {
-        isFalling = true;
-        while (isFalling == true)
-        {
-            yield return new WaitForFixedUpdate();
-            if (isFalling == true)
-            {
-                transform.position = new Vector2(transform.position.x, transform.position.y - 1);
-            }
-        }
-        yield return null;
     }
 }
