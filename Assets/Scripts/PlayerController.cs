@@ -19,7 +19,7 @@ public class PlayerController : MonoBehaviour
     {
         isGrounded = Physics2D.OverlapBox(_groundCheck.position, new Vector2(7,1), 0, _ground);
 
-        if (Input.GetButton("Horizontal"))
+        if (Input.GetButton("Horizontal") && Time.timeScale > 0)
         {
             _rb2d.velocity = new Vector2((16*Input.GetAxis("Horizontal")) * speed, _rb2d.velocity.y);
         } else
@@ -27,9 +27,17 @@ public class PlayerController : MonoBehaviour
             _rb2d.velocity = new Vector2(0, _rb2d.velocity.y);
         }
 
-        if (Input.GetKey(KeyCode.Space) && isGrounded)
+        if (Input.GetKey(KeyCode.Space) && isGrounded && Time.timeScale > 0)
         {
             _rb2d.velocity = new Vector2(_rb2d.velocity.x, 16 * jumpHeight);
+        }
+    }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Wall"))
+        {
+            CameraController.Camera.CameraMoving();
         }
     }
 }
