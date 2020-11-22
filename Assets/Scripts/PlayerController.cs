@@ -17,7 +17,7 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        isGrounded = Physics2D.OverlapBox(_groundCheck.position, new Vector2(7,1), 0, _ground);
+        isGrounded = Physics2D.OverlapBox(_groundCheck.position, new Vector2(7.9f,1), 0, _ground);
 
         if (Input.GetButton("Horizontal") && Time.timeScale > 0)
         {
@@ -35,9 +35,36 @@ public class PlayerController : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Wall"))
+        if (other.CompareTag("Wall") && Time.timeScale > 0)
         {
-            CameraController.Camera.CameraMoving();
+            bool horz = false;
+            bool vert = false;
+
+            if (transform.position.x < other.bounds.min.x)
+            {
+                transform.position = new Vector2(other.bounds.min.x + 32, transform.position.y);
+                horz = true;
+            }
+            if (transform.position.x > other.bounds.max.x)
+            {
+                transform.position = new Vector2(other.bounds.max.x - 32, transform.position.y);
+                horz = true;
+            }
+            if (transform.position.x < other.bounds.min.y)
+            {
+                transform.position = new Vector2(transform.position.x, other.bounds.min.y + 32);
+                vert = true;
+            }
+            if (transform.position.x > other.bounds.max.y)
+            {
+                transform.position = new Vector2(transform.position.x, other.bounds.max.y - 32);
+                vert = true;
+            }
+
+            if (horz || vert)
+            {
+                CameraController.Camera.StartCoroutine(CameraController.Camera.CameraMoving(horz, vert));
+            }
         }
     }
 }
