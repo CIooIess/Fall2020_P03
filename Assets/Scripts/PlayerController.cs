@@ -42,28 +42,28 @@ public class PlayerController : MonoBehaviour
 
             if (transform.position.x < other.bounds.min.x)
             {
-                transform.position = new Vector2(other.bounds.min.x + 32, transform.position.y);
+                transform.position = new Vector2(other.bounds.min.x + 24, transform.position.y);
                 horz = true;
             }
             if (transform.position.x > other.bounds.max.x)
             {
-                transform.position = new Vector2(other.bounds.max.x - 32, transform.position.y);
+                transform.position = new Vector2(other.bounds.max.x - 24, transform.position.y);
                 horz = true;
             }
-            if (transform.position.x < other.bounds.min.y)
+            if (transform.position.y < other.bounds.min.y)
             {
-                transform.position = new Vector2(transform.position.x, other.bounds.min.y + 32);
+                transform.position = new Vector2(transform.position.x, other.bounds.min.y + 24);
                 vert = true;
             }
-            if (transform.position.x > other.bounds.max.y)
+            if (transform.position.y > other.bounds.max.y)
             {
-                transform.position = new Vector2(transform.position.x, other.bounds.max.y - 32);
+                transform.position = new Vector2(transform.position.x, other.bounds.max.y - 24);
                 vert = true;
             }
 
             if (horz || vert)
             {
-                CameraController.Camera.StartCoroutine(CameraController.Camera.CameraMoving(horz, vert));
+                CameraController.Camera.StartCoroutine(CameraController.Camera.CameraMoving(vert,horz));
             }
         }
     }

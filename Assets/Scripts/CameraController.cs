@@ -42,7 +42,7 @@ public class CameraController : MonoBehaviour
         }
     }
 
-    public IEnumerator CameraMoving(bool horz, bool vert)
+    public IEnumerator CameraMoving(bool vert, bool horz)
     {
         cameraHeight = _mainCamera.orthographicSize * 2;
         cameraWidth = cameraHeight * _mainCamera.aspect;
@@ -60,18 +60,26 @@ public class CameraController : MonoBehaviour
             yield return new WaitForSecondsRealtime(0.001f);
         }
 
-        Vector3 targetPos = new Vector3(0,0,-10);
-        if (horz)
-        {
-            targetPos = new Vector3(Mathf.Clamp(_target.position.x, minX, maxX), _target.position.y, transform.position.z);
-        }
-        if (vert)
-        {
-            targetPos = new Vector3(_target.position.x, Mathf.Clamp(_target.position.y, minY, maxY), transform.position.z);
-        }
+        Vector3 targetPos = new Vector3(Mathf.Clamp(_target.position.x, minX, maxX), Mathf.Clamp(_target.position.y, minY, maxY), transform.position.z);
 
         while (transform.position != targetPos)
         {
+            if (vert)
+            {
+                while (transform.position.x != targetPos.x)
+                {
+                    transform.position = Vector3.MoveTowards(transform.position, new Vector3(targetPos.x, transform.position.y, transform.position.z), 1);
+                    yield return new WaitForSecondsRealtime(0.01f);
+                }
+            }
+            if (horz)
+            {
+                while (transform.position.y != targetPos.y)
+                {
+                    transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, targetPos.y, transform.position.z), 1);
+                    yield return new WaitForSecondsRealtime(0.01f);
+                }
+            }
             transform.position = Vector3.MoveTowards(transform.position, targetPos, 1);
             yield return new WaitForSecondsRealtime(0.001f);
         }
