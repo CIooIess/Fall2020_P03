@@ -17,25 +17,38 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        isGrounded = Physics2D.OverlapBox(_groundCheck.position, new Vector2(7.9f,1), 0, _ground);
+        if (!CameraController.Camera.cameraPause)
+        {
+            if (_rb2d.simulated != true)
+            {
+                _rb2d.simulated = true;
+            }
 
-        if (Input.GetButton("Horizontal") && Time.timeScale > 0)
-        {
-            _rb2d.velocity = new Vector2((16*Input.GetAxis("Horizontal")) * speed, _rb2d.velocity.y);
-        } else
-        {
-            _rb2d.velocity = new Vector2(0, _rb2d.velocity.y);
+            isGrounded = Physics2D.OverlapBox(_groundCheck.position, new Vector2(7.9f, 1), 0, _ground);
+
+            if (Input.GetButton("Horizontal"))
+            {
+                _rb2d.velocity = new Vector2((16 * Input.GetAxis("Horizontal")) * speed, _rb2d.velocity.y);
+            }
+            else
+            {
+                _rb2d.velocity = new Vector2(0, _rb2d.velocity.y);
+            }
+
+            if (Input.GetKey(KeyCode.Space) && isGrounded)
+            {
+                _rb2d.velocity = new Vector2(_rb2d.velocity.x, 16 * jumpHeight);
+            }
         }
-
-        if (Input.GetKey(KeyCode.Space) && isGrounded && Time.timeScale > 0)
+        else
         {
-            _rb2d.velocity = new Vector2(_rb2d.velocity.x, 16 * jumpHeight);
+            _rb2d.simulated = false;
         }
     }
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Wall") && Time.timeScale > 0)
+        if (other.CompareTag("Wall") && !CameraController.Camera.cameraPause)
         {
             bool horz = false;
             bool vert = false;

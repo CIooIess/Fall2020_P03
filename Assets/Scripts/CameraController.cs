@@ -6,11 +6,15 @@ using UnityEngine.UI;
 public class CameraController : MonoBehaviour
 {
     public static CameraController Camera;
+    public bool cameraPause = false;
 
     [SerializeField] Transform _target;
     [SerializeField] LayerMask _bounds;
     [SerializeField] Camera _mainCamera;
     [SerializeField] Image _fadeBox;
+    [SerializeField] Text _fps;
+
+    public float fadeTimer = 1f;
 
     void Start()
     {
@@ -19,7 +23,7 @@ public class CameraController : MonoBehaviour
 
     void Update()
     {
-        if (Time.timeScale > 0)
+        if (!cameraPause)
         {
             float cameraHeight = _mainCamera.orthographicSize * 2;
             float cameraWidth = cameraHeight * _mainCamera.aspect;
@@ -37,6 +41,8 @@ public class CameraController : MonoBehaviour
 
             transform.position = Vector3.MoveTowards(transform.position, new Vector3(Mathf.Clamp(_target.position.x, minX, maxX), Mathf.Clamp(_target.position.y, minY, maxY), transform.position.z), 2);
         }
+
+        _fps.text = (1.0f / Time.smoothDeltaTime).ToString();
     }
 
     public IEnumerator CameraMoving(bool vert, bool horz)
@@ -50,11 +56,14 @@ public class CameraController : MonoBehaviour
         float maxX = Physics2D.Raycast(_target.position, Vector2.right, Mathf.Infinity, _bounds).collider.bounds.max.x - cameraWidth / 2;
         float minX = Physics2D.Raycast(_target.position, Vector2.left, Mathf.Infinity, _bounds).collider.bounds.min.x + cameraWidth / 2;
 
-        Time.timeScale = 0;
-        for (int i = 0; i <= 255; i++)
+        cameraPause = true;
+
+        int colorSteps = Mathf.FloorToInt(fadeTimer / 0.02f);
+
+        for (int i = 0; i <= colorSteps; i++)
         {
-            _fadeBox.color = new Color(_fadeBox.color.r, _fadeBox.color.g, _fadeBox.color.b, (1f/255f)*i);
-            yield return new WaitForSecondsRealtime(0.001f);
+            _fadeBox.color = new Color(_fadeBox.color.r, _fadeBox.color.g, _fadeBox.color.b, (1f / colorSteps) * i);
+            yield return new WaitForFixedUpdate();
         }
 
         Vector3 targetPos = new Vector3(Mathf.Clamp(_target.position.x, minX, maxX), Mathf.Clamp(_target.position.y, minY, maxY), transform.position.z);
@@ -65,27 +74,29 @@ public class CameraController : MonoBehaviour
             {
                 while (transform.position.x != targetPos.x)
                 {
-                    transform.position = Vector3.MoveTowards(transform.position, new Vector3(targetPos.x, transform.position.y, transform.position.z), 1);
-                    yield return new WaitForSecondsRealtime(0.001f);
+                    transform.position = Vector3.MoveTowards(transform.position, new Vector3(targetPos.x, transform.position.y, transform.position.z), 400 * Time.deltaTime);
+                    yield return null;
                 }
             }
             if (horz)
             {
                 while (transform.position.y != targetPos.y)
                 {
-                    transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, targetPos.y, transform.position.z), 1);
-                    yield return new WaitForSecondsRealtime(0.001f);
+                    transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, targetPos.y, transform.position.z), 400 * Time.deltaTime);
+                    yield return null;
                 }
             }
-            transform.position = Vector3.MoveTowards(transform.position, targetPos, 1);
-            yield return new WaitForSecondsRealtime(0.001f);
+            transform.position = Vector3.MoveTowards(transform.position, targetPos, 400 * Time.deltaTime);
+            yield return null;
         }
-        for (int i = 255; i >= 0; i--)
+
+        for (int i = colorSteps; i >= 0; i--)
         {
-            _fadeBox.color = new Color(_fadeBox.color.r, _fadeBox.color.g, _fadeBox.color.b, (1f / 255f) * i);
-            yield return new WaitForSecondsRealtime(0.001f);
+            _fadeBox.color = new Color(_fadeBox.color.r, _fadeBox.color.g, _fadeBox.color.b, (1f / colorSteps) * i);
+            yield return new WaitForFixedUpdate();
         }
-        Time.timeScale = 1;
+
+        cameraPause = false;
         Debug.Log("done");
     }
 }
