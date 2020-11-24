@@ -40,7 +40,7 @@ public class CameraController : MonoBehaviour
             Debug.DrawLine(transform.position, new Vector2(minX, transform.position.y));
 
             Vector3 targetPos = new Vector3(Mathf.Clamp(_target.position.x, minX, maxX), Mathf.Clamp(_target.position.y, minY, maxY), transform.position.z);
-            transform.position = Vector3.MoveTowards(transform.position, targetPos, 2 * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, targetPos, 2);
         }
 
         _fps.text = (1.0f / Time.smoothDeltaTime).ToString();
