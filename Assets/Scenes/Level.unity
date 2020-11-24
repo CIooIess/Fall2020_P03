@@ -460,11 +460,6 @@ PrefabInstance:
       propertyPath: m_Points.m_Paths.Array.data[0].Array.data[0].y
       value: -272
       objectReference: {fileID: 0}
-    - target: {fileID: 7497597416274178354, guid: 7d35662d220331a46bacb3f47fd12f0d,
-        type: 3}
-      propertyPath: grid
-      value: 
-      objectReference: {fileID: 1119485482}
     - target: {fileID: 7497597416274178355, guid: 7d35662d220331a46bacb3f47fd12f0d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -703,11 +698,6 @@ PrefabInstance:
       propertyPath: m_Points.m_Paths.Array.data[0].Array.data[0].y
       value: -80
       objectReference: {fileID: 0}
-    - target: {fileID: 7497597416274178354, guid: 7d35662d220331a46bacb3f47fd12f0d,
-        type: 3}
-      propertyPath: grid
-      value: 
-      objectReference: {fileID: 1119485482}
     - target: {fileID: 7497597416274178355, guid: 7d35662d220331a46bacb3f47fd12f0d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -16150,11 +16140,6 @@ PrefabInstance:
       propertyPath: m_Points.m_Paths.Array.data[0].Array.data[0].y
       value: -80
       objectReference: {fileID: 0}
-    - target: {fileID: 7497597416274178354, guid: 7d35662d220331a46bacb3f47fd12f0d,
-        type: 3}
-      propertyPath: grid
-      value: 
-      objectReference: {fileID: 1119485482}
     - target: {fileID: 7497597416274178355, guid: 7d35662d220331a46bacb3f47fd12f0d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -16317,49 +16302,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!1 &1119485481
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1119485483}
-  - component: {fileID: 1119485482}
-  m_Layer: 0
-  m_Name: SnappingGrid
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!156049354 &1119485482
-Grid:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1119485481}
-  m_Enabled: 1
-  m_CellSize: {x: 16, y: 16, z: 0}
-  m_CellGap: {x: 0, y: 0, z: 0}
-  m_CellLayout: 0
-  m_CellSwizzle: 0
---- !u!4 &1119485483
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1119485481}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 8, y: 8, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1214087513
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -16412,11 +16354,6 @@ PrefabInstance:
       propertyPath: m_Points.m_Paths.Array.data[0].Array.data[0].y
       value: -272
       objectReference: {fileID: 0}
-    - target: {fileID: 7497597416274178354, guid: 7d35662d220331a46bacb3f47fd12f0d,
-        type: 3}
-      propertyPath: grid
-      value: 
-      objectReference: {fileID: 1119485482}
     - target: {fileID: 7497597416274178355, guid: 7d35662d220331a46bacb3f47fd12f0d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -16532,11 +16469,6 @@ PrefabInstance:
       propertyPath: m_Points.m_Paths.Array.data[0].Array.data[0].y
       value: 640
       objectReference: {fileID: 0}
-    - target: {fileID: 7497597416274178354, guid: 7d35662d220331a46bacb3f47fd12f0d,
-        type: 3}
-      propertyPath: grid
-      value: 
-      objectReference: {fileID: 1119485482}
     - target: {fileID: 7497597416274178355, guid: 7d35662d220331a46bacb3f47fd12f0d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -17061,11 +16993,6 @@ PrefabInstance:
       propertyPath: m_Points.m_Paths.Array.data[0].Array.data[1].y
       value: 176
       objectReference: {fileID: 0}
-    - target: {fileID: 7497597416274178354, guid: 7d35662d220331a46bacb3f47fd12f0d,
-        type: 3}
-      propertyPath: grid
-      value: 
-      objectReference: {fileID: 1119485482}
     - target: {fileID: 7497597416274178355, guid: 7d35662d220331a46bacb3f47fd12f0d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -17141,11 +17068,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Room00
       objectReference: {fileID: 0}
-    - target: {fileID: 7497597416274178354, guid: 7d35662d220331a46bacb3f47fd12f0d,
-        type: 3}
-      propertyPath: grid
-      value: 
-      objectReference: {fileID: 1119485482}
     - target: {fileID: 7497597416274178355, guid: 7d35662d220331a46bacb3f47fd12f0d,
         type: 3}
       propertyPath: m_LocalPosition.x
