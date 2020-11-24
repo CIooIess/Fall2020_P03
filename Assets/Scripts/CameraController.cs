@@ -39,7 +39,8 @@ public class CameraController : MonoBehaviour
             Debug.DrawLine(transform.position, new Vector2(maxX, transform.position.y));
             Debug.DrawLine(transform.position, new Vector2(minX, transform.position.y));
 
-            transform.position = Vector3.MoveTowards(transform.position, new Vector3(Mathf.Clamp(_target.position.x, minX, maxX), Mathf.Clamp(_target.position.y, minY, maxY), transform.position.z), 2);
+            Vector3 targetPos = new Vector3(Mathf.Clamp(_target.position.x, minX, maxX), Mathf.Clamp(_target.position.y, minY, maxY), transform.position.z);
+            transform.position = Vector3.MoveTowards(transform.position, targetPos, 2 * Time.deltaTime);
         }
 
         _fps.text = (1.0f / Time.smoothDeltaTime).ToString();
@@ -56,9 +57,11 @@ public class CameraController : MonoBehaviour
         float maxX = Physics2D.Raycast(_target.position, Vector2.right, Mathf.Infinity, _bounds).collider.bounds.max.x - cameraWidth / 2;
         float minX = Physics2D.Raycast(_target.position, Vector2.left, Mathf.Infinity, _bounds).collider.bounds.min.x + cameraWidth / 2;
 
+        //Step 1 - pause
         cameraPause = true;
 
-        int colorSteps = Mathf.FloorToInt(fadeTimer / 0.02f);
+        //Step 2 - fade-to-black
+        int colorSteps = Mathf.FloorToInt(fadeTimer / Time.fixedDeltaTime); //calculates # of steps possible within timer
 
         for (int i = 0; i <= colorSteps; i++)
         {
@@ -66,37 +69,47 @@ public class CameraController : MonoBehaviour
             yield return new WaitForFixedUpdate();
         }
 
+        //Step 3 - align to new room
+        //target position of the player clamped within the new room's min/max
         Vector3 targetPos = new Vector3(Mathf.Clamp(_target.position.x, minX, maxX), Mathf.Clamp(_target.position.y, minY, maxY), transform.position.z);
 
-        while (transform.position != targetPos)
+        if (vert) //on vertical entry
         {
-            if (vert)
+            while (transform.position.x != targetPos.x) //while the camera isn't horizontally aligned...
             {
-                while (transform.position.x != targetPos.x)
-                {
-                    transform.position = Vector3.MoveTowards(transform.position, new Vector3(targetPos.x, transform.position.y, transform.position.z), 400 * Time.deltaTime);
-                    yield return null;
-                }
+                //move to target (x only)
+                transform.position = Vector3.MoveTowards(transform.position, new Vector3(targetPos.x, transform.position.y, transform.position.z), 400 * Time.deltaTime);
+                yield return null;
             }
-            if (horz)
+        }
+        if (horz) //on horizontal entry
+        {
+            while (transform.position.y != targetPos.y) //while the camera isn't vertically aligned...
             {
-                while (transform.position.y != targetPos.y)
-                {
-                    transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, targetPos.y, transform.position.z), 400 * Time.deltaTime);
-                    yield return null;
-                }
+                //move to target (y only)
+                transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, targetPos.y, transform.position.z), 400 * Time.deltaTime);
+                yield return null;
             }
+        }
+
+        //Step 4 - move to new room
+        while (transform.position != targetPos) //while the camera isn't at the player yet...
+        {
+            //move to target
             transform.position = Vector3.MoveTowards(transform.position, targetPos, 400 * Time.deltaTime);
             yield return null;
         }
 
+        //Step 5 - fade from black
         for (int i = colorSteps; i >= 0; i--)
         {
             _fadeBox.color = new Color(_fadeBox.color.r, _fadeBox.color.g, _fadeBox.color.b, (1f / colorSteps) * i);
             yield return new WaitForFixedUpdate();
         }
 
+        //Step 6 - unpause
         cameraPause = false;
+
         Debug.Log("done");
     }
 }

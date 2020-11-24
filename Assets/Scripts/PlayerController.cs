@@ -48,33 +48,33 @@ public class PlayerController : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Wall") && !CameraController.Camera.cameraPause)
+        if (other.CompareTag("Wall") && !CameraController.Camera.cameraPause) //only works if entering a "wall" trigger, and the game is not paused due to camera mechanic!
         {
             bool horz = false;
             bool vert = false;
 
-            if (transform.position.x < other.bounds.min.x)
+            if (transform.position.x < other.bounds.min.x) //left side check
             {
                 transform.position = new Vector2(other.bounds.min.x + 24, transform.position.y);
-                horz = true;
+                horz = true; //horizontal entry
             }
-            if (transform.position.x > other.bounds.max.x)
+            if (transform.position.x > other.bounds.max.x) //right side check
             {
                 transform.position = new Vector2(other.bounds.max.x - 24, transform.position.y);
-                horz = true;
+                horz = true; //horizontal entry
             }
-            if (transform.position.y < other.bounds.min.y)
+            if (transform.position.y < other.bounds.min.y) //bottom check
             {
                 transform.position = new Vector2(transform.position.x, other.bounds.min.y + 24);
-                vert = true;
+                vert = true; //vertical entry
             }
-            if (transform.position.y > other.bounds.max.y)
+            if (transform.position.y > other.bounds.max.y) //top check
             {
                 transform.position = new Vector2(transform.position.x, other.bounds.max.y - 24);
-                vert = true;
+                vert = true; //vertical entry
             }
 
-            if (horz || vert)
+            if (horz || vert) //will only start the coroutine if entering at all! (prevents random triggering)
             {
                 CameraController.Camera.StartCoroutine(CameraController.Camera.CameraMoving(vert,horz));
             }
